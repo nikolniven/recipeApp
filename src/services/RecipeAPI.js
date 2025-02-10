@@ -1,20 +1,15 @@
 import axios from "axios";
-import React from "react";
 
 export default function RecipeAPI() {
-  const baseURL = "https://dummyjson.com";
+  const baseURL = "https://www.themealdb.com/api/json/v1/1";
 
-  const getAllRecipes = () => {
-    return axios.get(`${baseURL}/recipes`);
+  const getAllRecipesCategories = () => {
+    return axios.get(`${baseURL}/categories.php`);
   };
 
-  const getRecipeByID = (recipeID) => {
-    return axios.get(`${baseURL}/recipes/${recipeID}`);
+  const getAllRecipesIngredients = () => {
+    return axios.get(`${baseURL}/filter.php?i=${inputIngredient}`);
   };
 
-  const getRecipesTags = () => {
-    return axios.get(`${baseURL}/recipes/tags`);
-  };
-
-  return { getAllRecipes, getRecipeByID, getRecipesTags };
+  return { getAllRecipesCategories, getAllRecipesIngredients };
 }

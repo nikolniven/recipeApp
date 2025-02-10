@@ -6,52 +6,44 @@ const RecipeContext = createContext();
 
 // create contextWrapper to wrap everything in main.jsx
 export default function RecipeContextWrapper({ children }) {
-  const { getAllRecipes, getRecipeByID, getRecipesTags } = RecipeAPI();
-  const [recipesList, setRecipesList] = useState([]);
-  const [recipeItem, setRecipeItem] = useState({});
-  const [recipesTags, setRecipesTags] = useState([]);
+  const { getAllRecipesCategories } = RecipeAPI();
 
+  const [recipesCategories, setRecipesCategories] = useState([]);
+  const [recipesIngredients, setRecipesIngredients] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    getAllRecipes()
-      .then((response) => setRecipesList(response.data))
-      .catch((err) => setError(err))
-      .finally(() => setLoading(false));
-  }, []);
-
-  async function fetchSingleRecipe(recipeID) {
+  const fetchRecipesCategoires = async () => {
     try {
-      const response = await getRecipeByID(recipeID);
-      setRecipeItem(response.data);
+      setIsLoading(true);
+      const response = await getAllRecipesCategories();
+      setRecipesCategories(response.data.categories);
     } catch (err) {
       setError(err);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-  }
+  };
 
-  async function fetchRecipesTags() {
+  const fetchRecipesIngredients = async () => {
     try {
-      const response = await getRecipesTags();
-      setRecipesTags(response.data);
+      setRecipesIngredients = await getAllRecipesIngredients();
+      setRecipesIngredients(response.data.meals);
     } catch (err) {
       setError(err);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     // add the variables you want to share across your app in the value attribute
     <RecipeContext.Provider
       value={{
-        recipesList,
-        recipeItem,
-        recipesTags,
-        fetchSingleRecipe,
-        fetchRecipesTags,
+        recipesCategories,
+        recipesIngredients,
+        fetchRecipesCategoires,
+        fetchRecipesIngredients,
       }}
     >
       {children}

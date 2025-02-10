@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import StatCard from "../components/common/statCard";
+import RecipeAPI from "../services/RecipeAPI";
 
 const HomeOverview = () => {
   const styles = {
@@ -16,16 +17,14 @@ const HomeOverview = () => {
 
   const [myRecipeData, setMyRecipeData] = useState([]);
 
-  useEffect(() => {
-    const MYAPIURL = "www.themealdb.com/api/json/v1/1/list.php?c=l";
-    axios
-      .get(MYAPIURL)
-      .then((response) => {
-        setMyRecipeData(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+ useEffect(() => {
+   const fetchCategories = async () => {
+     const categories = await RecipeAPI.getRecipeByCategory();
+     console.log(categories);
+   };
+
+   fetchCategories();
+ }, []);
 
   ////graph
   return (
@@ -34,27 +33,27 @@ const HomeOverview = () => {
         <h1>Recipe App</h1>
         <div style={styles.cardContainer}>
           <StatCard
-            title="CUSINE"
+            title="ITALIAN"
             image="path/to/image.jpg"
             description="/"
             onClick={() => console.log("card clicked")}
           />
 
           <StatCard
-            title="INGREDIENTS"
+            title="gERMAN"
             image="path/to/image.jpg"
             description="/"
             onClick={() => console.log("card clicked")}
           />
 
           <StatCard
-            title="CATHEGORY"
+            title="INDIAN"
             image="path/to/image.jpg"
             description="/"
             onClick={() => console.log("card clicked")}
           />
           <StatCard
-            title="RANDOM RECIPE"
+            title="BRITISH"
             image="path/to/image.jpg"
             description="/"
             onClick={() => console.log("card clicked")}
