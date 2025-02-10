@@ -1,23 +1,12 @@
-// src/components/SearchMeal.jsx
-import { useState } from "react";
-import axios from "axios";
+import { useMealContext } from "../context/MealContext";
 
 const SearchMeal = () => {
-  const [query, setQuery] = useState("");  // Stores the search query
-  const [meals, setMeals] = useState([]);  // Stores the search results
-  const [loading, setLoading] = useState(false);  // Tracks the loading state
-  const [error, setError] = useState(null);  // Tracks any error during the fetch
+  const { query, setQuery, meals, loading, error, searchMeals } = useMealContext();
 
-  const handleSearch = async () => {
-    setLoading(true);  // Start loading
-    setError(null);  // Clear previous errors
-    try {
-      const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`);
-      setMeals(response.data.meals || []);  // Update state with the search results
-    } catch (err) {
-      setError("Error fetching meals. Please try again.");
+  const handleSearch = () => {
+    if (query.trim() !== "") {
+      searchMeals(query);
     }
-    setLoading(false);  // Stop loading
   };
 
   return (
@@ -41,7 +30,7 @@ const SearchMeal = () => {
 
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {meals?.map((meal) => (
           <div key={meal.idMeal} className="bg-white p-4 rounded-lg shadow-md">

@@ -2,16 +2,25 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import MealList from "./components/MealList";
 import SearchMeal from "./components/SearchMeal";
+import About from "./components/About";
+import Navbar from "./components/Navbar";
+import { MealProvider } from "./context/MealContext"; // Import MealProvider
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<Home />} /> {/* Homepage */}
-        <Route path="/meals" element={<MealList />} /> {/* Meal List Page */}
-        <Route path="/search" element={<SearchMeal />} /> {/* Search Page */}
-      </Routes>
-    </div>
+    <MealProvider> {/* Wrap entire app in MealProvider */}
+      <div className="min-h-screen bg-gray-100">
+        <Navbar />
+        <div className="pt-16 px-4">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/meals" element={<MealList />} />
+            <Route path="/search" element={<SearchMeal />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </div>
+      </div>
+    </MealProvider>
   );
 }
 
