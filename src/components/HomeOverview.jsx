@@ -59,7 +59,7 @@ const HomeOverview = () => {
             title="RANDOM RECIPE"
             image="path/to/image.jpg"
             description="/"
-            onClick={() => console.log("card clicked")}
+            onClick={() => navigate("/recipes/todaysrecipe")}
           />
         </div>
         <div>DIFFICULTY</div>

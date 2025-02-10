@@ -10,11 +10,13 @@ export default function RecipeContextWrapper({ children }) {
     getAllRecipesCategories,
     getAllRecipesIngredients,
     getAllRecipesArea,
+    getAllRecipesRandom,
   } = RecipeAPI();
 
   const [recipesCategories, setRecipesCategories] = useState([]);
   const [recipesIngredients, setRecipesIngredients] = useState([]);
   const [recipesArea, setRecipesArea] = useState([]);
+  const [recipesRandom, setRecipesRandom] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -57,6 +59,20 @@ export default function RecipeContextWrapper({ children }) {
     }
   };
 
+  const fetchRecipesRandom = async () => {
+    try {
+      setIsLoading(true);
+      // const response = await getAllRecipesRandom();
+      console.log(response);
+      // setRecipesRandom(response.data.meals);
+      return axios.get(`${baseURL}/random.php`);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     // add the variables you want to share across your app in the value attribute
     <RecipeContext.Provider
@@ -66,9 +82,11 @@ export default function RecipeContextWrapper({ children }) {
         recipesCategories,
         recipesIngredients,
         recipesArea,
+        recipesRandom,
         fetchRecipesCategoires,
         fetchRecipesIngredients,
         fetchRecipesArea,
+        fetchRecipesRandom,
       }}
     >
       {children}

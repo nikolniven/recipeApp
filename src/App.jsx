@@ -6,6 +6,7 @@ import RecipeItem from "./pages/RecipeItem";
 import RecipesCategoriesList from "./pages/RecipesCategoriesList";
 import RecipesIngredients from "./pages/RecipesIngredients";
 import RecipesArea from "./pages/RecipesArea";
+import RandomRecipe from "./pages/RandomRecipe";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             element={<RecipesCategoriesList />}
           />
           <Route path="/recipes/area" element={<RecipesArea />} />
+          <Route path="/recipes/random" element={<RandomRecipe />} />
           {/* <Route path="/recipes/:recipeID" element={<RecipeItem />} /> */}
         </Routes>
       </div>

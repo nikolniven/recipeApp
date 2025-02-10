@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useRecipeContext } from "../context/RecipeContext";
+import StatCard from "../components/common/statCard";
 
 export default function RecipesIngredients() {
   const { recipesIngredients, fetchRecipesIngredients } = useRecipeContext();
@@ -10,20 +11,16 @@ export default function RecipesIngredients() {
 
   return (
     <div>
-      {recipesIngredients && recipesIngredients.length > 0 ? (
-        <ul>
-          {recipesIngredients
-            .filter((ingredient) => ingredient.strDescription) // Filters out items with null descriptions
-            .map((ingredient) => (
-              <li key={ingredient.idIngredient}>
-                <strong>{ingredient.strIngredient}</strong>:{" "}
-                {ingredient.strDescription}
-              </li>
-            ))}
-        </ul>
-      ) : (
-        <p>Loading ingredients...</p>
-      )}
+      {recipesIngredients
+        .filter((i) => i.strDescription) // Remove empty descriptions
+        .map((ingredient) => (
+          <StatCard
+            key={ingredient.idIngredient}
+            title={ingredient.strIngredient}
+            image={`https://www.themealdb.com/images/ingredients/${ingredient.strIngredient}-Small.png`}
+            description={ingredient.strDescription}
+          />
+        ))}
     </div>
   );
 }

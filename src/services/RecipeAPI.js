@@ -18,9 +18,15 @@ export default function RecipeAPI() {
     return axios.get(`${baseURL}/list.php?a=list`);
   };
 
+  //search random recepie
+  const getRandomRecipie = () => {
+    return axios.get(`${baseURL}/random.php`);
+  };
+
   return {
     getAllRecipesCategories,
     getAllRecipesIngredients,
     getAllRecipesArea,
+    getRandomRecipie,
   };
 }
