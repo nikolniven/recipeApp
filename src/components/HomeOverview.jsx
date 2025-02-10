@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import StatCard from "../components/common/statCard";
+import { useNavigate } from "react-router-dom";
 
 const HomeOverview = () => {
   const styles = {
@@ -15,6 +16,7 @@ const HomeOverview = () => {
   };
 
   const [myRecipeData, setMyRecipeData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const MYAPIURL = "www.themealdb.com/api/json/v1/1/list.php?c=l";
@@ -44,14 +46,14 @@ const HomeOverview = () => {
             title="INGREDIENTS"
             image="path/to/image.jpg"
             description="/"
-            onClick={() => console.log("card clicked")}
+            onClick={() => navigate("/recipes/ingredients")}
           />
 
           <StatCard
             title="CATHEGORY"
             image="path/to/image.jpg"
             description="/"
-            onClick={() => console.log("card clicked")}
+            onClick={() => navigate("/recipes/categories")}
           />
           <StatCard
             title="RANDOM RECIPE"
