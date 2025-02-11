@@ -1,5 +1,6 @@
 // src/api/mealAPI.js
-import axios from 'axios';
+import axios from "axios";
+// import { useParams } from "react-router-dom";
 
 const API_URL = "https://www.themealdb.com/api/json/v1/1";
 

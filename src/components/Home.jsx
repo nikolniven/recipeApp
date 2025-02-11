@@ -23,6 +23,7 @@ const Home = () => {
         >
           ℹ️ About
         </Link>
+        
       </div>
     </div>
   );
