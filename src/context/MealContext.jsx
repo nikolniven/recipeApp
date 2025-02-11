@@ -2,24 +2,24 @@ import { createContext, useContext, useState } from "react";
 import axios from "axios";
 import { fetchMeals, fetchMealById } from "../api/MealApi";
 
-// Create the MealContext
 const MealContext = createContext();
 
-// Context Provider Component
 export const MealProvider = ({ children }) => {
+  // Search states
   const [query, setQuery] = useState("");
-  const [meals, setMeals] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [currentSearchType, setCurrentSearchType] = useState("by-meal");
 
+  // Data states
+  const [meals, setMeals] = useState([]);
   const [mealsIngredient, setMealsIngredient] = useState([]);
-  const [queryIngredient, setQueryIngredient] = useState("");
-  const [errorIngredient, setErrorIngredient] = useState(null);
-
+  const [ingredients, setIngredients] = useState([]);
   const [recipe, setRecipe] = useState(null);
 
-  // Fetch meals from API
+  // UI states
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [errorIngredient, setErrorIngredient] = useState(null);
+
   const searchMeals = async (searchQuery) => {
     setLoading(true);
     setError(null);
@@ -30,37 +30,21 @@ export const MealProvider = ({ children }) => {
       setMeals(response.data.meals || []);
     } catch (err) {
       setError("Error fetching meals. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
-
-  //searchByIngredient;
 
   const searchByIngredient = async (searchQueryIngredient) => {
     setLoading(true);
     setError(null);
     try {
       const response = await axios.get(
-        `https://www.themealdb.com/api/json/v1/1/search.php?i=${searchQueryIngredient}`,
+        `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchQueryIngredient}`,
       );
-      setMealsIngredient(response.data.mealsIngredient);
+      setMealsIngredient(response.data.meals || []);
     } catch (err) {
-      setErrorIngredient(
-        "Error fetching meals by ingredient 🧐. Please try again",
-      );
-    }
-    setLoading(false);
-  };
-
-  ////moving to the context
-
-  const getMeals = async () => {
-    setLoading(true);
-    try {
-      const data = await fetchMeals();
-      setMeals(data);
-    } catch (error) {
-      setError("Error fetching meals");
+      setErrorIngredient("Error fetching meals by ingredient");
     } finally {
       setLoading(false);
     }
@@ -68,7 +52,7 @@ export const MealProvider = ({ children }) => {
 
   const getRecipeById = async (id) => {
     setLoading(true);
-    setError(null); // Reset error state
+    setError(null);
     try {
       const data = await fetchMealById(id);
       if (!data) {
@@ -85,23 +69,25 @@ export const MealProvider = ({ children }) => {
   return (
     <MealContext.Provider
       value={{
+        // States
+        query,
         meals,
         mealsIngredient,
         recipe,
         loading,
         error,
-        query,
-        queryIngredient,
         errorIngredient,
-        setQuery,
-        getMeals,
-        getRecipeById,
-        searchMeals,
         currentSearchType,
+
+        // Setters
+        setQuery,
         setCurrentSearchType,
-        setQueryIngredient,
         setErrorIngredient,
+
+        // Actions
+        searchMeals,
         searchByIngredient,
+        getRecipeById,
       }}
     >
       {children}
@@ -109,5 +95,10 @@ export const MealProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the context
-export const useMealContext = () => useContext(MealContext);
+export const useMealContext = () => {
+  const context = useContext(MealContext);
+  if (!context) {
+    throw new Error("useMealContext must be used within a MealProvider");
+  }
+  return context;
+};
