@@ -7,6 +7,24 @@ export const MealProvider = ({ children }) => {
   const [meals, setMeals] = useState([]);
   const [meal, setMeal] = useState(null); // Random meal
   const [mealIndex, setMealIndex] = useState(null); // Index of the current random meal
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  //search
+  const searchMeals = async (query) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetchMeals(query); // Pass query to fetchMeals
+      setMeals(response);
+    } catch (err) {
+      console.error("Error fetching meals:", err);
+      setError("Failed to fetch meals");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Fetch all meals for searching or random meal
   const fetchAllMeals = async () => {
@@ -47,8 +65,12 @@ export const MealProvider = ({ children }) => {
       value={{
         meals,
         meal,
+        query,
+        setQuery,
+        loading,
+        error,
         fetchAllMeals,
-        // getRandomMealFromList,
+        searchMeals,
         nextMeal,
         previousMeal,
       }}

@@ -1,11 +1,12 @@
 import { useMealContext } from "../context/MealContext";
 
 const SearchMeal = () => {
-  const { query, setQuery, meals, loading, error, searchMeals } = useMealContext();
+  const { query, setQuery, meals, loading, error, searchMeals } =
+    useMealContext();
 
   const handleSearch = () => {
     if (query.trim() !== "") {
-      searchMeals(query);
+      searchMeals(query); // Trigger the search only if query is non-empty
     }
   };
 
