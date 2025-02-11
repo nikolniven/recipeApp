@@ -4,7 +4,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <nav className="bg-white shadow-md p-4 fixed w-full top-0 flex justify-between items-center">
+    <nav className="bg-white shadow-md p-4 fixed w-full top-0 flex justify-between items-center z-50">
       <Link to="/" className="text-xl font-bold text-blue-600">
         🍽️ Recipe App
       </Link>

@@ -1,40 +1,56 @@
 import { createContext, useContext, useState } from "react";
-import axios from "axios";
+import { fetchMeals, getRandomMeal } from "../api/MealApi"; // Import getRandomMeal
 
-// Create the MealContext
 const MealContext = createContext();
 
-// Context Provider Component
 export const MealProvider = ({ children }) => {
-  const [query, setQuery] = useState("");
   const [meals, setMeals] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [meal, setMeal] = useState(null); // Random meal
+  const [mealIndex, setMealIndex] = useState(null); // Index of the current random meal
 
-  // Fetch meals from API
-  const searchMeals = async (searchQuery) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axios.get(
-        `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchQuery}`
-      );
-      setMeals(response.data.meals || []);
-    } catch (err) {
-      setError("Error fetching meals. Please try again.");
-    }
-    setLoading(false);
+  // Fetch all meals for searching or random meal
+  const fetchAllMeals = async () => {
+    const mealsData = await fetchMeals();
+    setMeals(mealsData);
+    const randomIndex = Math.floor(Math.random() * mealsData.length); // Get random index
+    const randomMeal = mealsData[randomIndex];
+    setMeal(randomMeal);
+    setMealIndex(randomIndex);
+  };
+
+  // Fetch a random meal
+  // const getRandomMealFromList = async () => {
+  //   await fetchAllMeals();
+  //   const randomMeal = getRandomMeal(meals);
+  //   setMeal(randomMeal);
+  //   setMealIndex(meals.indexOf(randomMeal)); // Save index of the random meal
+  // };
+
+  // Fetch next random meal
+  const nextMeal = () => {
+    if (meals.length === 0 || mealIndex === null) return;
+    const nextIndex = (mealIndex + 1) % meals.length; // Wrap around
+    setMeal(meals[nextIndex]);
+    setMealIndex(nextIndex);
+  };
+
+  // Fetch previous random meal
+  const previousMeal = () => {
+    if (meals.length === 0 || mealIndex === null) return;
+    const prevIndex = (mealIndex - 1 + meals.length) % meals.length; // Wrap around
+    setMeal(meals[prevIndex]);
+    setMealIndex(prevIndex);
   };
 
   return (
     <MealContext.Provider
       value={{
-        query,
-        setQuery,
         meals,
-        loading,
-        error,
-        searchMeals,
+        meal,
+        fetchAllMeals,
+        // getRandomMealFromList,
+        nextMeal,
+        previousMeal,
       }}
     >
       {children}
@@ -42,5 +58,4 @@ export const MealProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the context
 export const useMealContext = () => useContext(MealContext);
