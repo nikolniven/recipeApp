@@ -1,8 +1,10 @@
 // src/components/MealList.jsx
 import { useState, useEffect } from "react";
 import { fetchMeals } from "../api/MealApi";
+import { useNavigate } from "react-router-dom";
 
 const MealList = () => {
+  const navigate = useNavigate();
   const [meals, setMeals] = useState([]);
 
   useEffect(() => {
@@ -20,6 +22,8 @@ const MealList = () => {
         {meals?.map((meal) => (
           <div key={meal.idMeal} className="bg-white p-4 rounded-lg shadow-md">
             <img
+              onClick={() => navigate(`/meals/${meal.idMeal}`)}
+              style={{ cursor: "pointer" }}
               src={meal.strMealThumb}
               alt={meal.strMeal}
               className="w-full h-48 object-cover rounded-lg mb-4"

@@ -5,10 +5,13 @@ import SearchMeal from "./components/SearchMeal";
 import About from "./components/About";
 import Navbar from "./components/Navbar";
 import { MealProvider } from "./context/MealContext"; // Import MealProvider
+import RecipeDetail from "./components/RecipeDetail";
 
 function App() {
   return (
-    <MealProvider> {/* Wrap entire app in MealProvider */}
+    <MealProvider>
+      {" "}
+      {/* Wrap entire app in MealProvider */}
       <div className="min-h-screen bg-gray-100">
         <Navbar />
         <div className="pt-16 px-4">
@@ -17,6 +20,7 @@ function App() {
             <Route path="/meals" element={<MealList />} />
             <Route path="/search" element={<SearchMeal />} />
             <Route path="/about" element={<About />} />
+            <Route path="/meals/:id" element={<RecipeDetail />} />
           </Routes>
         </div>
       </div>
