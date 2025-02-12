@@ -29,11 +29,11 @@ const RecipeDetail = () => {
           <div>
             <h2 className="text-2xl font-semibold mb-3">Ingredients</h2>
             <ul className="pl-6 space-y-2">
-              {Array.from({ length: 20 }, (_, i) => i + 1)
+              {Array.from({ length: 20 }, (_, i) => i + 1) // Create an array [1, 2, ..., 20]
                 .filter(
                   (i) =>
                     recipe[`strIngredient${i}`] &&
-                    recipe[`strIngredient${i}`].trim(),
+                    recipe[`strIngredient${i}`].trim(), // Keep only non-empty ingredients
                 )
                 .map((i) => (
                   <li key={i} className="flex items-center gap-2">

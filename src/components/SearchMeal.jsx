@@ -1,4 +1,5 @@
 import { useMealContext } from "../context/MealContext";
+import { Link } from "react-router-dom";
 
 const SearchMeal = () => {
   const {
@@ -25,10 +26,9 @@ const SearchMeal = () => {
 
   const handleChange = (e) => {
     setCurrentSearchType(e.target.value);
-    setQuery(""); // Clear search when switching search type
+    setQuery("");
   };
 
-  console.log(currentSearchType);
   return (
     <div className="container mx-auto p-4">
       <div className="mb-4 flex items-center space-x-4">
@@ -78,24 +78,32 @@ const SearchMeal = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {currentSearchType === "by-meal"
           ? meals?.map((meal) => (
-              <div key={meal.idMeal} className="bg-white p-4 rounded shadow">
+              <Link
+                to={`/meals/${meal.idMeal}`}
+                key={meal.idMeal}
+                className="bg-white p-4 rounded shadow"
+              >
                 <img
                   src={meal.strMealThumb}
                   alt={meal.strMeal}
                   className="w-full h-48 object-cover rounded"
                 />
                 <h2 className="mt-2 font-bold">{meal.strMeal}</h2>
-              </div>
+              </Link>
             ))
           : mealsIngredient?.map((meal) => (
-              <div key={meal.idMeal} className="bg-white p-4 rounded shadow">
+              <Link
+                to={`/meals/${meal.idMeal}`}
+                key={meal.idMeal}
+                className="bg-white p-4 rounded shadow"
+              >
                 <img
                   src={meal.strMealThumb}
                   alt={meal.strMeal}
                   className="w-full h-48 object-cover rounded"
                 />
                 <h2 className="mt-2 font-bold">{meal.strMeal}</h2>
-              </div>
+              </Link>
             ))}
       </div>
     </div>
