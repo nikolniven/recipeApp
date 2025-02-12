@@ -12,16 +12,16 @@ const About = () => {
       image: "https://avatars.githubusercontent.com/u/93343167?v=4", // Replace with their actual profile picture
       description: "Tech enthusiast and problem solver 💡",
       github: "https://github.com/nikolniven", // Replace with their GitHub link
-      linkedin: "https://www.linkedin.com/in/another-person/", // Replace with their LinkedIn link
+      linkedin: "https://www.linkedin.com/in/nikol-topalusic/", // Replace with their LinkedIn link
     },
   ];
 
   return (
-    <div className="flex flex-row items-center justify-center min-h-screen bg-gray-100 p-6">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
       {people.map((person, index) => (
         <div
           key={index}
-          className="bg-white p-6 rounded-lg shadow-md mb-4 mx-4 text-center max-w-md"
+          className="bg-white p-6 rounded-lg shadow-md text-center max-w-md mb-6"
         >
           {/* Clickable Profile Picture */}
           <a href={person.github} target="_blank" rel="noopener noreferrer">

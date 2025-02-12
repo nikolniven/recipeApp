@@ -24,6 +24,8 @@ const MealList = () => {
             className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
           >
             <img
+              onClick={() => navigate(`/meals/${meal.idMeal}`)}
+              style={{ cursor: "pointer" }}
               src={meal.strMealThumb}
               alt={meal.strMeal}
               className="w-full h-48 object-cover rounded-lg mb-4 cursor-pointer"
