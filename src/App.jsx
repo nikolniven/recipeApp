@@ -23,6 +23,7 @@ function App() {
             <Route path="/search" element={<SearchMeal />} />
             <Route path="/meal-of-the-day" element={<MealOfTheDay />} />
             <Route path="/about" element={<About />} />
+            <Route path="/meals/:id" element={<RecipeDetail />} />
           </Routes>
         </div>
       </div>

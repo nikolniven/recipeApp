@@ -1,102 +1,59 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { useMealContext } from "../context/MealContext";
 
 const RecipeDetail = () => {
   const { id } = useParams();
-  const [meal, setMeal] = useState(null);
+  //   const [recipe, setRecipe] = useState(null);
+  //   const [loading, setLoading] = useState(true);
+  const { recipe, loading, error, getRecipeById } = useMealContext();
 
   useEffect(() => {
-    const fetchMealDetail = async () => {
-      try {
-        const response = await axios.get(
-          `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
-        );
-        setMeal(response.data.meals[0]);
-      } catch (error) {
-        console.error("Error fetching meal details:", error);
-      }
-    };
-    fetchMealDetail();
+    getRecipeById(id);
   }, [id]);
 
-  if (!meal) {
-    return (
-      <p className="text-center text-gray-500">Loading Recipe Details...</p>
-    );
-  }
-
-  // Extract ingredients & measurements
-  const ingredients = [];
-  for (let i = 1; i <= 20; i++) {
-    if (meal[`strIngredient${i}`]) {
-      ingredients.push(
-        `${meal[`strIngredient${i}`]} (${meal[`strMeasure${i}`]})`
-      );
-    }
-  }
+  if (loading) return <div className="p-4">Loading...</div>;
+  if (error) return <div className="p-4 text-red-500">{error}</div>;
+  if (!recipe) return <div className="p-4">Recipe not found</div>;
 
   return (
-    <div className="bg-yellow-100 p-6 rounded-lg shadow-md text-center max-w-3xl mx-auto mt-10">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">{meal.strMeal}</h2>
-
-      <div className="flex justify-center items-center mb-4 relative">
-        {/* Meal Image */}
+    <div className="container mx-auto p-4">
+      <div className="bg-white rounded-lg shadow-lg p-8">
+        <h1 className="text-3xl font-bold mb-4">{recipe.strMeal}</h1>
         <img
-          src={meal.strMealThumb}
-          alt={meal.strMeal}
-          className="max-w-full h-80 object-contain rounded-lg z-10"
+          src={recipe.strMealThumb}
+          alt={recipe.strMeal}
+          className="w-full max-w-lg rounded-lg mb-6 mx-auto"
         />
-      </div>
-
-      <h3 className="text-lg font-semibold mb-2 text-gray-700">
-        {meal.strCategory}
-      </h3>
-
-      {/* Ingredients */}
-      <div className="text-center text-sm text-gray-600 mb-4">
-        <h4 className="font-semibold mb-2">Ingredients:</h4>
-        <div className="flex flex-wrap justify-center">
-          {ingredients.map((ingredient, index) => (
-            <div
-              key={index}
-              className="mx-2 mb-2 text-center bg-gray-200 p-2 rounded-lg"
-            >
-              {ingredient}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-2xl font-semibold mb-3">Ingredients</h2>
+            <ul className="pl-6 space-y-2">
+              {Array.from({ length: 20 }, (_, i) => i + 1) // Create an array [1, 2, ..., 20]
+                .filter(
+                  (i) =>
+                    recipe[`strIngredient${i}`] &&
+                    recipe[`strIngredient${i}`].trim(), // Keep only non-empty ingredients
+                )
+                .map((i) => (
+                  <li key={i} className="flex items-center gap-2">
+                    <span>🥄</span>
+                    <span>
+                      {recipe[`strIngredient${i}`]} - {recipe[`strMeasure${i}`]}
+                    </span>
+                  </li>
+                ))}
+            </ul>
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold mb-3">Instructions</h2>
+            <div>
+              <p className="whitespace-pre-line">{recipe.strInstructions}</p>
             </div>
-          ))}
+          </div>
         </div>
       </div>
-
-      {/* Instructions */}
-      <div className="text-left text-sm text-gray-600 mb-4">
-        <h4 className="font-semibold">Instructions:</h4>
-        <p>{meal.strInstructions}</p>
-      </div>
-
-      {/* Links */}
-      <div className="mt-4">
-        {meal.strSource && (
-          <a
-            href={meal.strSource}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:underline block mb-2"
-          >
-            Recipe Source
-          </a>
-        )}
-        {meal.strYoutube && (
-          <a
-            href={meal.strYoutube}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:underline"
-          >
-            Watch Recipe Video
-          </a>
-        )}
-      </div>
+      detailView
     </div>
   );
 };

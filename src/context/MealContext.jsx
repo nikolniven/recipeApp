@@ -80,10 +80,13 @@ export const MealProvider = ({ children }) => {
         recipe,
         query,
         setQuery,
+        meals,
         loading,
         error,
         fetchAllMeals,
         searchMeals,
+        searchByIngredient,
+        getRecipeById,
         searchByIngredient, // Provide searchByIngredient
         getRecipeById,
         currentSearchType,
