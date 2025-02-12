@@ -4,8 +4,6 @@ import { useMealContext } from "../context/MealContext";
 
 const RecipeDetail = () => {
   const { id } = useParams();
-  //   const [recipe, setRecipe] = useState(null);
-  //   const [loading, setLoading] = useState(true);
   const { recipe, loading, error, getRecipeById } = useMealContext();
 
   useEffect(() => {
@@ -16,44 +14,71 @@ const RecipeDetail = () => {
   if (error) return <div className="p-4 text-red-500">{error}</div>;
   if (!recipe) return <div className="p-4">Recipe not found</div>;
 
+  // Collect ingredients
+  const ingredients = [];
+  for (let i = 1; i <= 20; i++) {
+    if (recipe[`strIngredient${i}`]) {
+      ingredients.push(
+        `${recipe[`strIngredient${i}`]} (${recipe[`strMeasure${i}`]})`
+      );
+    }
+  }
+
   return (
-    <div className="container mx-auto p-4">
-      <div className="bg-white rounded-lg shadow-lg p-8">
-        <h1 className="text-3xl font-bold mb-4">{recipe.strMeal}</h1>
+    <div className="bg-yellow-100 p-6 rounded-lg shadow-md text-center relative z-10">
+      <h2 className="text-3xl font-bold mb-4">{recipe.strMeal}</h2>
+
+      <div className="flex justify-center items-center mb-4 relative">
+        {/* Image */}
         <img
           src={recipe.strMealThumb}
           alt={recipe.strMeal}
-          className="w-full max-w-lg rounded-lg mb-6 mx-auto"
+          className="max-w-full h-80 object-contain rounded-lg z-10"
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h2 className="text-2xl font-semibold mb-3">Ingredients</h2>
-            <ul className="pl-6 space-y-2">
-              {Array.from({ length: 20 }, (_, i) => i + 1) // Create an array [1, 2, ..., 20]
-                .filter(
-                  (i) =>
-                    recipe[`strIngredient${i}`] &&
-                    recipe[`strIngredient${i}`].trim(), // Keep only non-empty ingredients
-                )
-                .map((i) => (
-                  <li key={i} className="flex items-center gap-2">
-                    <span>🥄</span>
-                    <span>
-                      {recipe[`strIngredient${i}`]} - {recipe[`strMeasure${i}`]}
-                    </span>
-                  </li>
-                ))}
-            </ul>
-          </div>
-          <div>
-            <h2 className="text-2xl font-semibold mb-3">Instructions</h2>
-            <div>
-              <p className="whitespace-pre-line">{recipe.strInstructions}</p>
+      </div>
+
+      <h3 className="text-lg font-semibold mb-2">{recipe.strCategory}</h3>
+
+      <div className="text-center text-sm text-gray-600 mb-4">
+        <h4 className="font-semibold mb-2">Ingredients:</h4>
+        <div className="flex flex-wrap justify-center">
+          {ingredients.map((ingredient, index) => (
+            <div
+              key={index}
+              className="mx-2 mb-2 text-center bg-gray-200 p-2 rounded-lg"
+            >
+              {ingredient}
             </div>
-          </div>
+          ))}
         </div>
       </div>
-      detailView
+
+      <div className="text-left text-sm text-gray-600 mb-4">
+        <h4 className="font-semibold">Instructions:</h4>
+        <p className="whitespace-pre-line">{recipe.strInstructions}</p>
+      </div>
+
+      <div className="mt-4">
+        <a
+          href={recipe.strSource}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:underline"
+        >
+          Recipe Source
+        </a>
+      </div>
+
+      <div className="mt-2">
+        <a
+          href={recipe.strYoutube}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:underline"
+        >
+          Watch Recipe Video
+        </a>
+      </div>
     </div>
   );
 };
