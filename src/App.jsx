@@ -6,6 +6,7 @@ import About from "./components/About";
 import Navbar from "./components/Navbar";
 import MealOfTheDay from "./components/MealOfTheDay";
 import { MealProvider } from "./context/MealContext"; // Import MealProvider
+import RecipeDetail from "./components/RecipeDetail";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/meals" element={<MealList />} />
+            <Route path="/meals/:id" element={<RecipeDetail />} />
             <Route path="/search" element={<SearchMeal />} />
             <Route path="/meal-of-the-day" element={<MealOfTheDay />} />
             <Route path="/about" element={<About />} />

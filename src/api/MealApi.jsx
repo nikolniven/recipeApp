@@ -32,3 +32,14 @@ export const getRandomMeal = (meals) => {
   const randomIndex = Math.floor(Math.random() * meals.length); // Get random index
   return meals[randomIndex];
 };
+
+// src/api/MealApi.js
+export const fetchMealsByIngredient = async (ingredient) => {
+  try {
+    const response = await axios.get(`${API_URL}/filter.php?i=${ingredient}`);
+    return response.data.meals || [];
+  } catch (error) {
+    console.error("Error fetching meals by ingredient:", error);
+    throw new Error("Error fetching meals by ingredient");
+  }
+};

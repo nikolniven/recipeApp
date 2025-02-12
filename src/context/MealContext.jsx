@@ -1,5 +1,9 @@
 import { createContext, useContext, useState } from "react";
-import { fetchMeals, getRandomMeal } from "../api/MealApi"; // Import getRandomMeal
+import {
+  fetchMeals,
+  fetchMealsByIngredient,
+  fetchMealById,
+} from "../api/MealApi"; // Import the fetch function for ingredients
 
 const MealContext = createContext();
 
@@ -10,8 +14,10 @@ export const MealProvider = ({ children }) => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [recipe, setRecipe] = useState(null); // Add recipe state
+  const [currentSearchType, setCurrentSearchType] = useState("by-meal"); // Default to "by-meal"
 
-  //search
+  // Search meals by name
   const searchMeals = async (query) => {
     try {
       setLoading(true);
@@ -26,38 +32,44 @@ export const MealProvider = ({ children }) => {
     }
   };
 
-  // Fetch all meals for searching or random meal
+  // Search meals by ingredient
+  const searchByIngredient = async (query) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetchMealsByIngredient(query);
+      setMeals(response);
+    } catch (err) {
+      console.error("Error fetching meals by ingredient:", err);
+      setError("Failed to fetch meals by ingredient");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch a random meal
   const fetchAllMeals = async () => {
     const mealsData = await fetchMeals();
     setMeals(mealsData);
-    const randomIndex = Math.floor(Math.random() * mealsData.length); // Get random index
+    const randomIndex = Math.floor(Math.random() * mealsData.length);
     const randomMeal = mealsData[randomIndex];
     setMeal(randomMeal);
     setMealIndex(randomIndex);
   };
 
-  // Fetch a random meal
-  // const getRandomMealFromList = async () => {
-  //   await fetchAllMeals();
-  //   const randomMeal = getRandomMeal(meals);
-  //   setMeal(randomMeal);
-  //   setMealIndex(meals.indexOf(randomMeal)); // Save index of the random meal
-  // };
-
-  // Fetch next random meal
-  const nextMeal = () => {
-    if (meals.length === 0 || mealIndex === null) return;
-    const nextIndex = (mealIndex + 1) % meals.length; // Wrap around
-    setMeal(meals[nextIndex]);
-    setMealIndex(nextIndex);
-  };
-
-  // Fetch previous random meal
-  const previousMeal = () => {
-    if (meals.length === 0 || mealIndex === null) return;
-    const prevIndex = (mealIndex - 1 + meals.length) % meals.length; // Wrap around
-    setMeal(meals[prevIndex]);
-    setMealIndex(prevIndex);
+  // Fetch a recipe by ID
+  const getRecipeById = async (id) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const recipeData = await fetchMealById(id);
+      setRecipe(recipeData);
+    } catch (err) {
+      console.error("Error fetching recipe:", err);
+      setError("Failed to fetch recipe");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -65,14 +77,29 @@ export const MealProvider = ({ children }) => {
       value={{
         meals,
         meal,
+        recipe,
         query,
         setQuery,
         loading,
         error,
         fetchAllMeals,
         searchMeals,
-        nextMeal,
-        previousMeal,
+        searchByIngredient, // Provide searchByIngredient
+        getRecipeById,
+        currentSearchType,
+        setCurrentSearchType, // Provide setter function for currentSearchType
+        nextMeal: () => {
+          if (meals.length === 0 || mealIndex === null) return;
+          const nextIndex = (mealIndex + 1) % meals.length;
+          setMeal(meals[nextIndex]);
+          setMealIndex(nextIndex);
+        },
+        previousMeal: () => {
+          if (meals.length === 0 || mealIndex === null) return;
+          const prevIndex = (mealIndex - 1 + meals.length) % meals.length;
+          setMeal(meals[prevIndex]);
+          setMealIndex(prevIndex);
+        },
       }}
     >
       {children}
