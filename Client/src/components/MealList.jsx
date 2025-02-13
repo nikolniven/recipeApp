@@ -29,7 +29,6 @@ const MealList = () => {
               src={meal.strMealThumb}
               alt={meal.strMeal}
               className="w-full h-48 object-cover rounded-lg mb-4 cursor-pointer"
-              onClick={() => navigate(`/meals/${meal.idMeal}`)}
             />
             <h2 className="text-lg font-semibold">{meal.strMeal}</h2>
             <p className="text-sm text-gray-500">{meal.strCategory}</p>

@@ -28,12 +28,17 @@ const Home = () => {
           🔍 Search Meals
         </Link>
         <Link
+          to="/dashboard"
+          className="block w-60 text-center bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600"
+        >
+          👤 My Account
+        </Link>
+        <Link
           to="/about"
           className="block w-60 text-center bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-purple-600"
         >
           ℹ️ About
         </Link>
-        
       </div>
     </div>
   );
