@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useMealContext } from "../context/MealContext"; // Use the context for favorites
+import { useTheme } from "../context/ThemeContext";
 
 const RecipeDetail = () => {
   const { id } = useParams();
+  const { theme, toggleTheme } = useTheme(); // Access theme context
   const {
     recipe,
     loading,
@@ -48,7 +50,13 @@ const RecipeDetail = () => {
   };
 
   return (
-    <div className="bg-yellow-100 p-6 rounded-lg shadow-md text-center relative z-10">
+    <div
+      className={`p-6 rounded-lg shadow-md text-center relative z-10 ${
+        theme === "dark"
+          ? "bg-gray-800 text-gray-300"
+          : "bg-yellow-100 text-gray-900"
+      }`}
+    >
       <h2 className="text-3xl font-bold mb-4">{recipe.strMeal}</h2>
 
       <div className="flex justify-center items-center mb-4 relative">
@@ -62,13 +70,17 @@ const RecipeDetail = () => {
 
       <h3 className="text-lg font-semibold mb-2">{recipe.strCategory}</h3>
 
-      <div className="text-center text-sm text-gray-600 mb-4">
+      <div className="text-center text-sm mb-4">
         <h4 className="font-semibold mb-2">Ingredients:</h4>
         <div className="flex flex-wrap justify-center">
           {ingredients.map((ingredient, index) => (
             <div
               key={index}
-              className="mx-2 mb-2 text-center bg-gray-200 p-2 rounded-lg"
+              className={`mx-2 mb-2 text-center ${
+                theme === "dark"
+                  ? "bg-gray-700 text-gray-300"
+                  : "bg-gray-200 text-gray-900"
+              } p-2 rounded-lg`}
             >
               {ingredient}
             </div>
@@ -76,7 +88,7 @@ const RecipeDetail = () => {
         </div>
       </div>
 
-      <div className="text-left text-sm text-gray-600 mb-4">
+      <div className="text-left text-sm mb-4">
         <h4 className="font-semibold">Instructions:</h4>
         <p className="whitespace-pre-line">{recipe.strInstructions}</p>
       </div>

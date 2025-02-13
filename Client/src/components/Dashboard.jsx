@@ -36,19 +36,16 @@ export default function Dashboard() {
 
   const handleDeleteFavourite = async (mealId) => {
     try {
-      // Fetch the current favourites from json-server
       const response = await axios.get("http://localhost:5005/favourites/1");
       const favouriteMeals = response.data.favourite_meals || [];
 
-      // Remove the mealId from the array
       const updatedMeals = favouriteMeals.filter((id) => id !== +mealId);
-      // Send PUT request to update the database
+
       await axios.put(`http://localhost:5005/favourites/1`, {
         user_id: 1,
         favourite_meals: updatedMeals,
       });
 
-      // Update local state to reflect changes
       setUserFavourites((prevFavourites) =>
         prevFavourites.filter((meal) => meal.idMeal !== mealId)
       );
@@ -62,17 +59,17 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6 dark:bg-gray-800 dark:text-gray-200">
       <h1 className="text-xl font-semibold mb-4">Your Favourite Meals</h1>
 
       {userFavourites.length === 0 ? (
-        <p>No favourites yet!</p>
+        <p className="text-gray-500 dark:text-gray-400">No favourites yet!</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {userFavourites.map((meal) => (
             <div
               key={meal.idMeal}
-              className="relative bg-white p-4 rounded-lg shadow-md"
+              className="relative bg-white p-4 rounded-lg shadow-md dark:bg-gray-700 dark:text-gray-200"
             >
               <Link to={`/meals/${meal.idMeal}`} className="block">
                 <img
@@ -81,13 +78,15 @@ export default function Dashboard() {
                   className="w-full h-48 object-cover rounded-lg mb-4"
                 />
                 <h2 className="text-lg font-semibold">{meal.strMeal}</h2>
-                <p className="text-sm text-gray-500">{meal.strCategory}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-300">
+                  {meal.strCategory}
+                </p>
               </Link>
 
               {/* Delete Button */}
               <button
                 onClick={() => handleDeleteFavourite(meal.idMeal)}
-                className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm hover:bg-red-600"
+                className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
               >
                 ❌
               </button>

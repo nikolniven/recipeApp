@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { useMealContext } from "../context/MealContext";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+
 const SearchMeal = () => {
   const {
     query,
@@ -19,6 +20,7 @@ const SearchMeal = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const mealQuery = searchParams.get("meal");
   const ingredientQuery = searchParams.get("ingredient");
+
   useEffect(() => {
     if (mealQuery) {
       setQuery(mealQuery);
@@ -28,6 +30,7 @@ const SearchMeal = () => {
       searchByIngredient(ingredientQuery);
     }
   }, [mealQuery, ingredientQuery]);
+
   const handleSearch = () => {
     if (query.trim() !== "") {
       if (currentSearchType === "by-meal") {
@@ -39,11 +42,12 @@ const SearchMeal = () => {
       }
     }
   };
+
   const handleChange = (e) => {
     setCurrentSearchType(e.target.value);
     setQuery("");
   };
-  console.log(mealsIngredient);
+
   return (
     <div className="container mx-auto p-4">
       <div className="mb-4 flex flex-col items-center space-x-4">
@@ -57,10 +61,12 @@ const SearchMeal = () => {
                 ? "Search for meals..."
                 : "Search by ingredient..."
             }
-            className="p-2 border rounded"
+            className="p-2 border rounded text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400" // Improved text visibility
           />
           <div className="space-x-4">
-            <label>
+            <label className="text-gray-700 dark:text-gray-300">
+              {" "}
+              {/* Adjust text color */}
               <input
                 type="radio"
                 value="by-meal"
@@ -70,7 +76,9 @@ const SearchMeal = () => {
               />
               Search by Meal
             </label>
-            <label>
+            <label className="text-gray-700 dark:text-gray-300">
+              {" "}
+              {/* Adjust text color */}
               <input
                 type="radio"
                 value="by-ingredient"
@@ -88,7 +96,11 @@ const SearchMeal = () => {
             Search
           </button>
         </div>
-        {loading && <div className="text-center">Loading...</div>}
+        {loading && (
+          <div className="text-center text-gray-700 dark:text-gray-300">
+            Loading...
+          </div>
+        )}
         {error && <div className="text-red-500 text-center">{error}</div>}
         {errorIngredient && (
           <div className="text-red-500 text-center">{errorIngredient}</div>
@@ -107,27 +119,25 @@ const SearchMeal = () => {
               <Link
                 to={`/meals/${meal.idMeal}`}
                 key={meal.idMeal}
-                className="bg-white p-4 rounded shadow"
+                className="bg-white p-4 rounded shadow dark:bg-gray-800 dark:text-gray-200" // Adjust background and text for dark mode
               >
-                <div
-                  key={meal.idMeal}
-                  className="bg-white p-4 rounded-lg shadow-md"
-                >
+                <div className="bg-white p-4 rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-200">
                   <img
                     src={meal.strMealThumb}
                     alt={meal.strMeal}
                     className="w-full h-48 object-cover rounded-lg mb-4"
                   />
                   <h2 className="text-lg font-semibold">{meal.strMeal}</h2>
-                  <p className="text-sm text-gray-500">{meal.strCategory}</p>
-                  {/* Ingredients */}
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {meal.strCategory}
+                  </p>
                   <div className="mt-2 text-sm">
                     <h3 className="font-semibold mb-1">Ingredients:</h3>
                     <div className="flex flex-wrap gap-1">
                       {ingredients.map((ingredient, index) => (
                         <span
                           key={index}
-                          className="bg-gray-200 px-2 py-1 rounded-md text-xs"
+                          className="bg-gray-200 px-2 py-1 rounded-md text-xs dark:bg-gray-700 dark:text-gray-300"
                         >
                           {ingredient}
                         </span>
@@ -143,4 +153,5 @@ const SearchMeal = () => {
     </div>
   );
 };
+
 export default SearchMeal;

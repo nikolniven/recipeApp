@@ -2,14 +2,8 @@ import { useEffect, useRef } from "react";
 import { useMealContext } from "../context/MealContext";
 
 const MealOfTheDay = () => {
-  const {
-    meal,
-    meals,
-    fetchAllMeals,
-    // getRandomMealFromList,
-    nextMeal,
-    previousMeal,
-  } = useMealContext();
+  const { meal, meals, fetchAllMeals, nextMeal, previousMeal } =
+    useMealContext();
   const fetched = useRef(false);
 
   useEffect(() => {
@@ -21,11 +15,11 @@ const MealOfTheDay = () => {
     };
   }, []);
 
-  console.log(meal);
-
   if (!meal)
     return (
-      <p className="text-center text-gray-500">Loading Meal of the Day...</p>
+      <p className="text-center text-gray-500 dark:text-gray-300">
+        Loading Meal of the Day...
+      </p>
     );
 
   // Collect ingredients
@@ -39,9 +33,8 @@ const MealOfTheDay = () => {
   }
 
   return (
-    <div className="bg-yellow-100 p-6 rounded-lg shadow-md text-center  relative z-10">
-      {/* The mt-24 class adds margin-top to create space for a fixed navbar */}
-      <h2 className="text-xl font-bold mb-2">
+    <div className="bg-yellow-100 p-6 rounded-lg shadow-md text-center relative z-10 dark:bg-gray-800 dark:text-gray-200">
+      <h2 className="text-xl font-bold mb-2 dark:text-gray-200">
         Meal of the Day: {meal.strMeal}
       </h2>
 
@@ -70,15 +63,17 @@ const MealOfTheDay = () => {
         </button>
       </div>
 
-      <h3 className="text-lg font-semibold mb-2">{meal.strCategory}</h3>
+      <h3 className="text-lg font-semibold mb-2 dark:text-gray-200">
+        {meal.strCategory}
+      </h3>
 
-      <div className="text-center text-sm text-gray-600 mb-4">
+      <div className="text-center text-sm text-gray-600 dark:text-gray-400 mb-4">
         <h4 className="font-semibold mb-2">Ingredients:</h4>
         <div className="flex flex-wrap justify-center">
           {ingredients.map((ingredient, index) => (
             <div
               key={index}
-              className="mx-2 mb-2 text-center bg-gray-200 p-2 rounded-lg"
+              className="mx-2 mb-2 text-center bg-gray-200 p-2 rounded-lg dark:bg-gray-700 dark:text-gray-300"
             >
               {ingredient}
             </div>
@@ -86,7 +81,7 @@ const MealOfTheDay = () => {
         </div>
       </div>
 
-      <div className="text-left text-sm text-gray-600 mb-4">
+      <div className="text-left text-sm text-gray-600 dark:text-gray-400 mb-4">
         <h4 className="font-semibold">Instructions:</h4>
         <p>{meal.strInstructions}</p>
       </div>
@@ -96,7 +91,7 @@ const MealOfTheDay = () => {
           href={meal.strSource}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
+          className="text-blue-500 hover:underline dark:text-blue-400"
         >
           Recipe Source
         </a>
@@ -107,7 +102,7 @@ const MealOfTheDay = () => {
           href={meal.strYoutube}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
+          className="text-blue-500 hover:underline dark:text-blue-400"
         >
           Watch Recipe Video
         </a>
