@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useMealContext } from "../context/MealContext";
+import { useMealContext } from "../context/MealContext"; // Use the context for favorites
 
 const RecipeDetail = () => {
   const { id } = useParams();
-  const { recipe, loading, error, getRecipeById } = useMealContext();
+  const {
+    recipe,
+    loading,
+    error,
+    getRecipeById,
+    addFavourite,
+    deleteFavourite,
+    userFavourites,
+  } = useMealContext(); // Add addFavourite and userFavourites to context
 
   useEffect(() => {
     getRecipeById(id);
@@ -23,6 +31,21 @@ const RecipeDetail = () => {
       );
     }
   }
+
+  // Check if the current recipe is already in favorites
+  const isFavorite = userFavourites?.some(
+    (meal) => meal.idMeal === recipe.idMeal
+  );
+
+  const handleFavoriteToggle = () => {
+    if (isFavorite) {
+      // Remove from favorites
+      deleteFavourite(recipe.idMeal);
+    } else {
+      // Add to favorites
+      addFavourite(recipe.idMeal);
+    }
+  };
 
   return (
     <div className="bg-yellow-100 p-6 rounded-lg shadow-md text-center relative z-10">
@@ -79,6 +102,16 @@ const RecipeDetail = () => {
           Watch Recipe Video
         </a>
       </div>
+
+      {/* Favorite Button */}
+      <button
+        onClick={handleFavoriteToggle}
+        className={`absolute top-2 right-2 p-2 text-2xl rounded-full ${
+          isFavorite ? "text-red-500" : "text-gray-500"
+        }`}
+      >
+        {isFavorite ? "❤️" : "🤍"}
+      </button>
     </div>
   );
 };
