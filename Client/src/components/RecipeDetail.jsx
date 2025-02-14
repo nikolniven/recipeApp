@@ -16,6 +16,7 @@ const RecipeDetail = () => {
     userFavourites,
   } = useMealContext(); // Add addFavourite and userFavourites to context
 
+  //after component loads and id in url changes fetch recipe details
   useEffect(() => {
     getRecipeById(id);
   }, [id]);
@@ -29,14 +30,14 @@ const RecipeDetail = () => {
   for (let i = 1; i <= 20; i++) {
     if (recipe[`strIngredient${i}`]) {
       ingredients.push(
-        `${recipe[`strIngredient${i}`]} (${recipe[`strMeasure${i}`]})`
+        `${recipe[`strIngredient${i}`]} (${recipe[`strMeasure${i}`]})`,
       );
     }
   }
 
   // Check if the current recipe is already in favorites
   const isFavorite = userFavourites?.some(
-    (meal) => meal.idMeal === recipe.idMeal
+    (meal) => meal.idMeal === recipe.idMeal,
   );
 
   const handleFavoriteToggle = () => {

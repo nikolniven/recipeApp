@@ -8,15 +8,14 @@ const SearchMeal = () => {
     query,
     setQuery,
     meals,
-    mealsIngredient,
     loading,
     error,
-    errorIngredient,
     searchMeals,
     searchByIngredient,
     currentSearchType,
     setCurrentSearchType,
   } = useMealContext();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const mealQuery = searchParams.get("meal");
   const ingredientQuery = searchParams.get("ingredient");
@@ -24,21 +23,21 @@ const SearchMeal = () => {
   useEffect(() => {
     if (mealQuery) {
       setQuery(mealQuery);
-      searchMeals(mealQuery);
+      searchMeals(mealQuery); //Context
     } else if (ingredientQuery) {
       setQuery(ingredientQuery);
       searchByIngredient(ingredientQuery);
     }
-  }, [mealQuery, ingredientQuery]);
+  }, [mealQuery, ingredientQuery]); // the effect runs each time either mealQuery or ingredientQuery changes //ansonst once
 
   const handleSearch = () => {
     if (query.trim() !== "") {
-      if (currentSearchType === "by-meal") {
-        searchMeals(query);
-        setSearchParams({ meal: query }); // Update URL with meal query
-      } else {
+      if (currentSearchType === "by-meal") {// based on the selected radio button
+        searchMeals(query); //the function from context will run with the query
+        setSearchParams({ meal: query }); // Update URL with meal query //obj passed as arg
+      } else { //query is set to either or with useEffect
         searchByIngredient(query);
-        setSearchParams({ ingredient: query });
+        setSearchParams({ ingredient: query }); //NEW HOOK
       }
     }
   };
@@ -89,6 +88,7 @@ const SearchMeal = () => {
               Search by Ingredient
             </label>
           </div>
+
           <button
             onClick={handleSearch}
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
@@ -102,16 +102,13 @@ const SearchMeal = () => {
           </div>
         )}
         {error && <div className="text-red-500 text-center">{error}</div>}
-        {errorIngredient && (
-          <div className="text-red-500 text-center">{errorIngredient}</div>
-        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {meals.map((meal) => {
             const ingredients = [];
             for (let i = 1; i <= 20; i++) {
               if (meal[`strIngredient${i}`]) {
                 ingredients.push(
-                  `${meal[`strIngredient${i}`]} (${meal[`strMeasure${i}`]})`
+                  `${meal[`strIngredient${i}`]} (${meal[`strMeasure${i}`]})`,
                 );
               }
             }
